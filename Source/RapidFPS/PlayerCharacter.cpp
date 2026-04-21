@@ -47,12 +47,26 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("You pressed a move button"));
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+			{
+				// add movement
+				AddMovementInput(GetActorForwardVector(), MovementVector.Y);
+				AddMovementInput(GetActorRightVector(), MovementVector.X);
+			}
 }
 
 void APlayerCharacter::Jump(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("You pressed the jump button"));
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+			{
+				// add movement
+				AddControllerYawInput(LookAxisVector.X);
+				AddControllerPitchInput(LookAxisVector.Y);	
+			}
 }
 
 void APlayerCharacter::Look(const FInputActionValue& Value)
