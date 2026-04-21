@@ -57,7 +57,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 			}
 }
 
-void APlayerCharacter::Jump(const FInputActionValue& Value)
+void APlayerCharacter::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -69,7 +69,7 @@ void APlayerCharacter::Jump(const FInputActionValue& Value)
 			}
 }
 
-void APlayerCharacter::Look(const FInputActionValue& Value)
+void APlayerCharacter::Jump(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("You moved the mouse for look"));
 }
