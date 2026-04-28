@@ -45,8 +45,8 @@ AFPSProjectile::AFPSProjectile()
 
 
 
-    // Delete the projectile after 1 second.
-    InitialLifeSpan = 1.0f;
+    // Delete the projectile after 30 seconds.
+    InitialLifeSpan = 30.0f;
 
 }
 
@@ -75,8 +75,21 @@ void AFPSProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 {
     if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
     {
-        OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+        OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 200.0f, Hit.ImpactPoint);
     }
-    Destroy();
+
+    if (ProjectileMovementComponent)
+    {
+		ProjectileMovementComponent->StopMovementImmediately();
+		ProjectileMovementComponent->SetActive(false);
+    }
+
+    if (CollisionComponent)
+    {
+        CollisionComponent->SetSimulatePhysics(true);
+		// Apply the current velocity as an impulse to maintain momentum after the projectile has stopped moving.
+		CollisionComponent->AddImpulse(ProjectileMovementComponent->Velocity);
+	}
+    //Destroy();
 }
 
