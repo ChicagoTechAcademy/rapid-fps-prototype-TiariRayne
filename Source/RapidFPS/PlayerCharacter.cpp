@@ -10,6 +10,9 @@ APlayerCharacter::APlayerCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	currentAmmo = maxAmmo;
+	storedAmmo = maxAmmo * 2;
+
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +49,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+void APlayerCharacter::DecreaseAmmo(int ammospent)
+{
+	currentAmmo -= ammospent;
+}
+
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -77,6 +85,9 @@ void APlayerCharacter::Jump(const FInputActionValue& Value)
 
 void APlayerCharacter::Shoot(const FInputActionValue& Value)
 {
+	if (currentAmmo > 0)
+	{
+
 		// Attempt to fire a projectile.
 		if (ProjectileClass)
 		{
@@ -109,13 +120,21 @@ void APlayerCharacter::Shoot(const FInputActionValue& Value)
 					// Set the projectile's initial trajectory.
 					FVector LaunchDirection = MuzzleRotation.Vector();
 					Projectile->FireInDirection(LaunchDirection);
+					DecreaseAmmo(1);
 				}
 			}
+
 		}
 	}
+		
+}
 
 void APlayerCharacter::Reload(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("You pressed the reload button"));
+	if (storedAmmo >  maxAmmo)
+	{
+		currentAmmo = maxAmmo;
+		storedAmmo -= maxAmmo;
+	}
 }
 
