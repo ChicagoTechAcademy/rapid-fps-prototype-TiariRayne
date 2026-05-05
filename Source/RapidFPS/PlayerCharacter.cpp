@@ -131,10 +131,27 @@ void APlayerCharacter::Shoot(const FInputActionValue& Value)
 
 void APlayerCharacter::Reload(const FInputActionValue& Value)
 {
-	if (storedAmmo >  maxAmmo)
+	//if stored ammo = 7, then 7 > 5, that works
+	//what if stored ammo is 2? 2 !>5, what do we do?
+
+	// loops repeat 
+
+	//stored = 5
+	//current = 0
+
+	//stored = 4
+	//current = 1
+
+	//stored = 3
+	//current = 2
+
+	while ((currentAmmo < maxAmmo) && (storedAmmo > 0))
 	{
-		currentAmmo = maxAmmo;
-		storedAmmo -= maxAmmo;
+		currentAmmo += 1;
+		storedAmmo -= 1;
+
+		UE_LOG(LogTemp, Warning, TEXT("Stored Ammo: %d"), storedAmmo);
+		UE_LOG(LogTemp, Warning, TEXT("Current Ammo: %d"), currentAmmo);
 	}
 }
 
